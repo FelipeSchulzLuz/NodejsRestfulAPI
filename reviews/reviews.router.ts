@@ -16,20 +16,26 @@ class ReviewsRouter extends ModelRouter<Review>{
                     .populate('restaurant')
     }
 
+    envelope(document){
+        let resource = super.envelope(document)
+        const restId = document.restaurant._id ? document.restaurant._id : document.restaurant
+        resource._links.restaurant = `/restaurant/${restId}`
+        return resource
+    }
 
     applyRoutes(application: restify.Server) {
         
         // Route for get all users on DB
-        application.get('/reviews', this.findAll)
+        application.get(`${this.basePath}`, this.findAll)
 
         // Route method GET for get an review by ID on DB
-        application.get('/reviews/:id',[this.validateId, this.findById])
+        application.get(`${this.basePath}/:id`,[this.validateId, this.findById])
 
         // Route method POST for include a review on DB
-        application.post('/reviews', this.save)
+        application.post(`${this.basePath}`, this.save)
 
         // Route method DELETE for delete an document on DB
-        application.del('/reviews/:id', [this.validateId,this.delete])
+        application.del(`${this.basePath}/:id`, [this.validateId,this.delete])
     }
 
 }
