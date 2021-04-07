@@ -1,8 +1,8 @@
+import { authenticate } from './../security/auth.handler';
 import { ModelRouter } from '../common/model-router'
 import * as restify from 'restify'
 import { User } from './users.model'
 import {NotFoundError} from 'restify-errors'
-
 
 
 
@@ -44,15 +44,18 @@ class UsersRouter extends ModelRouter<User> {
 
         // Route method POST for include a user on DB
         application.post(`${this.basePath}`, this.save)
-
+        
         // Route method PUT for substitute document on DB
         application.put(`${this.basePath}/:id`, [this.validateId,this.replace])
-
+        
         // Route method PATH, update the document on DB
         application.patch(`${this.basePath}/:id`, [this.validateId,this.update])
-
+        
         // Route method DELETE for delete an document on DB
         application.del(`${this.basePath}/:id`, [this.validateId,this.delete])
+        
+        // Route method POST for authenticate user login with JWT
+        application.post(`${this.basePath}/authenticate`, authenticate)
     }
 }
 

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersRouter = void 0;
+const auth_handler_1 = require("./../security/auth.handler");
 const model_router_1 = require("../common/model-router");
 const users_model_1 = require("./users.model");
 class UsersRouter extends model_router_1.ModelRouter {
@@ -42,6 +43,8 @@ class UsersRouter extends model_router_1.ModelRouter {
         application.patch(`${this.basePath}/:id`, [this.validateId, this.update]);
         // Route method DELETE for delete an document on DB
         application.del(`${this.basePath}/:id`, [this.validateId, this.delete]);
+        // Route method POST for authenticate user login with JWT
+        application.post(`${this.basePath}/authenticate`, auth_handler_1.authenticate);
     }
 }
 exports.usersRouter = new UsersRouter();
