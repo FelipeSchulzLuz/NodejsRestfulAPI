@@ -1,8 +1,9 @@
+import * as restify from 'restify'
+import * as fs from 'fs'
+import * as mongoose from 'mongoose'
 import { tokenParser } from './../security/token.parser';
 import { environment } from '../common/environment';
-import * as restify from 'restify'
 import { Router } from '../common/router'
-import * as mongoose from 'mongoose'
 import { mergePatchBodyParser } from './merge-patch.parser'
 import { handleError } from './error.handler'
 
@@ -21,7 +22,9 @@ export class Server {
             try {
                 this.application = restify.createServer({
                     name: 'meat-api',
-                    version: '1.0.0'
+                    version: '1.0.0',
+                    certificate: fs.readFileSync('./security/keys/cert.pem'),
+                    key: fs.readFileSync('./security/keys/key.pem')
                 })
 
                 this.application.use(restify.plugins.queryParser())
@@ -50,7 +53,7 @@ export class Server {
     bootstrap(routers: Router[] = []): Promise<Server> {
         return this.initializeDb().then(() => this.initRoutes(routers).then(() => this))
     }
-    shutdown(){
-        return mongoose.disconnect().then(()=> this.application.close())
+    shutdown() {
+        return mongoose.disconnect().then(() => this.application.close())
     }
 }
