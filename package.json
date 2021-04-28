@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "jest": {
-    "globals":{
+    "globals": {
       "address": "http://localhost:3001"
     },
     "testEnvironment": "node",
