@@ -60,13 +60,23 @@ userSchema.statics.findByEmail = function (email: string, projection: string) {
     return this.findOne({ email }, projection)
 }
 
-userSchema.methods.matches = function(password: string): boolean {
+userSchema.methods.matches = function (password: string): boolean {
     return bcrypt.compareSync(password, this.password)
 }
 
-userSchema.methods.hasAny = function(...profiles: string[]): boolean {
+userSchema.methods.hasAny = function (...profiles: string[]): boolean {
     return profiles.some(profile => this.profiles.indexOf(profile) !== -1)
 }
+
+userSchema.methods.matches = function (password: string): boolean {
+    return bcrypt.compareSync(password, this.password)
+}
+
+userSchema.methods.hasAny = function (...profiles: string[]): boolean {
+    return profiles.some(profile => this.profiles.indexOf(profile) !== -1)
+}
+
+
 
 const hashPassword = (obj, next) => {
     bcrypt.hash(obj.password, environment.security.saltRounds)
