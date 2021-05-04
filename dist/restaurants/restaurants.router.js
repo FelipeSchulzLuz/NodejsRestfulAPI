@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.restaurantsRouter = void 0;
+const authz_handler_1 = require("./../security/authz.handler");
 const model_router_1 = require("../common/model-router");
 const restaurants_model_1 = require("./restaurants.model");
 const restify_errors_1 = require("restify-errors");
@@ -44,17 +45,17 @@ class RestaurantsRouter extends model_router_1.ModelRouter {
         // Route method GET for get an user by ID on DB
         application.get(`${this.basePath}/:id`, [this.validateId, this.findById]);
         // Route method POST for include a user on DB
-        application.post(`${this.basePath}`, this.save);
+        application.post(`${this.basePath}`, [authz_handler_1.authorize('admin'), this.save]);
         // Route method PUT for substitute user on DB
-        application.put(`${this.basePath}/:id`, [this.validateId, this.replace]);
+        application.put(`${this.basePath}/:id`, [authz_handler_1.authorize('admin'), this.validateId, this.replace]);
         // Route method PATH, update the user on DB
-        application.patch(`${this.basePath}/:id`, [this.validateId, this.update]);
+        application.patch(`${this.basePath}/:id`, [authz_handler_1.authorize('admin'), this.validateId, this.update]);
         // Route method DELETE for delete an user on DB
-        application.del(`${this.basePath}/:id`, [this.validateId, this.delete]);
+        application.del(`${this.basePath}/:id`, [authz_handler_1.authorize('admin'), this.validateId, this.delete]);
         // Route method GET an restaurant by ID on DB
         application.get(`${this.basePath}/:id/menu`, [this.validateId, this.findMenu]);
         // Route for 
-        application.put(`${this.basePath}/:id/menu`, [this.validateId, this.replaceMenu]);
+        application.put(`${this.basePath}/:id/menu`, [authz_handler_1.authorize('admin'), this.validateId, this.replaceMenu]);
     }
 }
 exports.restaurantsRouter = new RestaurantsRouter();

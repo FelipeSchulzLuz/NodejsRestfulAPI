@@ -2,7 +2,7 @@ import { restaurantsRouter } from './restaurants.router';
 import { Restaurant } from './restaurants.model';
 import 'jest'
 import * as request from "supertest"
-import { environment } from './../common/environment';
+import { environment } from '../common/environment';
 
 
 let address: string = (<any>global).address
