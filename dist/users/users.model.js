@@ -50,6 +50,12 @@ userSchema.methods.matches = function (password) {
 userSchema.methods.hasAny = function (...profiles) {
     return profiles.some(profile => this.profiles.indexOf(profile) !== -1);
 };
+userSchema.methods.matches = function (password) {
+    return bcrypt.compareSync(password, this.password);
+};
+userSchema.methods.hasAny = function (...profiles) {
+    return profiles.some(profile => this.profiles.indexOf(profile) !== -1);
+};
 const hashPassword = (obj, next) => {
     bcrypt.hash(obj.password, environment_1.environment.security.saltRounds)
         .then(hash => {
