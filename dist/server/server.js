@@ -6,6 +6,7 @@ const restify = require("restify");
 const mongoose = require("mongoose");
 const merge_patch_parser_1 = require("./merge-patch.parser");
 const error_handler_1 = require("./error.handler");
+const logger_1 = require("../common/logger");
 class Server {
     initializeDb() {
         mongoose.Promise = global.Promise;
@@ -18,8 +19,12 @@ class Server {
             try {
                 this.application = restify.createServer({
                     name: 'meat-api',
-                    version: '1.0.0'
+                    version: '1.0.0',
+                    log: logger_1.logger
                 });
+                this.application.pre(restify.plugins.requestLogger({
+                    log: logger_1.logger
+                }));
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
                 this.application.use(merge_patch_parser_1.mergePatchBodyParser);

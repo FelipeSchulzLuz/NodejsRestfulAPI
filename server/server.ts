@@ -4,6 +4,7 @@ import { Router } from '../common/router'
 import * as mongoose from 'mongoose'
 import { mergePatchBodyParser } from './merge-patch.parser'
 import { handleError } from './error.handler'
+import { logger } from '../common/logger';
 
 
 export class Server {
@@ -21,9 +22,13 @@ export class Server {
             try {
                 this.application = restify.createServer({
                     name: 'meat-api',
-                    version: '1.0.0'
+                    version: '1.0.0',
+                    log: logger
                 })
 
+                this.application.pre(restify.plugins.requestLogger({
+                    log: logger
+                }))
                 this.application.use(restify.plugins.queryParser())
                 this.application.use(restify.plugins.bodyParser())
                 this.application.use(mergePatchBodyParser)
@@ -32,7 +37,6 @@ export class Server {
                 for (let router of routers) {
                     router.applyRoutes(this.application)
                 }
-
 
                 this.application.listen(environment.server.port, () => {
                     resolve(this.application)
