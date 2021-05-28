@@ -8,6 +8,7 @@ const token_parser_1 = require("./../security/token.parser");
 const environment_1 = require("../common/environment");
 const merge_patch_parser_1 = require("./merge-patch.parser");
 const error_handler_1 = require("./error.handler");
+const logger_1 = require("../common/logger");
 class Server {
     initializeDb() {
         mongoose.Promise = global.Promise;
@@ -24,6 +25,9 @@ class Server {
                     certificate: fs.readFileSync('./security/keys/cert.pem'),
                     key: fs.readFileSync('./security/keys/key.pem')
                 });
+                this.application.pre(restify.plugins.requestLogger({
+                    log: logger_1.logger
+                }));
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
                 this.application.use(merge_patch_parser_1.mergePatchBodyParser);

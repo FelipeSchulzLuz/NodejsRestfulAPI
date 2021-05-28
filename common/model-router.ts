@@ -80,8 +80,9 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     replace = (req, res, next) => {
         const options = { runValidators: true, overwrite: true }
         this.model.update({ _id: req.params.id }, req.body, options).exec()
-            .then((result) => {
-                if (result.n) {
+            .then(result => {
+                if (result) {
+
                     return this.prepareOne(this.model.findById(req.params.id))
                 } else {
                     throw new NotFoundError('Documento não encontrado')

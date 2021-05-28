@@ -33,7 +33,7 @@
     "jsonwebtoken": "8.1.1",
     "mongoose": "4.13.9",
     "nodemon": "^2.0.7",
-    "restify": "6.3.4",
+    "restify": "^6.3.4",
     "restify-errors": "5.0.0"
   },
   "devDependencies": {

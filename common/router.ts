@@ -11,7 +11,6 @@ export abstract class Router extends EventEmitter {
     }
 
     envelopeAll(documents: any[], options: any = {}): any {
-        
         return documents
     }
 
