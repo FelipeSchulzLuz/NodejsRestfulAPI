@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
-const environment_1 = require("../common/environment");
 const restify = require("restify");
+const fs = require("fs");
 const mongoose = require("mongoose");
+const token_parser_1 = require("./../security/token.parser");
+const environment_1 = require("../common/environment");
 const merge_patch_parser_1 = require("./merge-patch.parser");
 const error_handler_1 = require("./error.handler");
 const logger_1 = require("../common/logger");
@@ -20,7 +22,8 @@ class Server {
                 this.application = restify.createServer({
                     name: 'meat-api',
                     version: '1.0.0',
-                    log: logger_1.logger
+                    certificate: fs.readFileSync('./security/keys/cert.pem'),
+                    key: fs.readFileSync('./security/keys/key.pem')
                 });
                 this.application.pre(restify.plugins.requestLogger({
                     log: logger_1.logger
@@ -28,6 +31,7 @@ class Server {
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
                 this.application.use(merge_patch_parser_1.mergePatchBodyParser);
+                this.application.use(token_parser_1.tokenParser);
                 // Routes
                 for (let router of routers) {
                     router.applyRoutes(this.application);

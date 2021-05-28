@@ -41,8 +41,20 @@ const userSchema = new mongoose.Schema({
         requires: false
     }
 });
-userSchema.statics.findByEmail = function (email) {
-    return this.findOne({ email });
+userSchema.statics.findByEmail = function (email, projection) {
+    return this.findOne({ email }, projection);
+};
+userSchema.methods.matches = function (password) {
+    return bcrypt.compareSync(password, this.password);
+};
+userSchema.methods.hasAny = function (...profiles) {
+    return profiles.some(profile => this.profiles.indexOf(profile) !== -1);
+};
+userSchema.methods.matches = function (password) {
+    return bcrypt.compareSync(password, this.password);
+};
+userSchema.methods.hasAny = function (...profiles) {
+    return profiles.some(profile => this.profiles.indexOf(profile) !== -1);
 };
 userSchema.methods.matches = function (password) {
     return bcrypt.compareSync(password, this.password);

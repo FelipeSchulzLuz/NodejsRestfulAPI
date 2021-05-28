@@ -14,5 +14,6 @@ exports.environment = {
     log: {
         level: process.env.LOG_LEVEL || 'debug',
         name: 'meat-api-logger'
+
     }
 };
